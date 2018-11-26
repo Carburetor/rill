@@ -17,7 +17,7 @@ defmodule Rill.MessageStore do
               session :: term(),
               stream_name :: String.t(),
               opts :: [read_option()],
-              fun :: nil | (%Read{} -> term())
+              fun :: nil | (%Read{}, term() -> term())
             ) :: Enumerable.t() | term()
 
   @type write_option ::
@@ -41,7 +41,7 @@ defmodule Rill.MessageStore do
           database :: module(),
           stream_name :: String.t(),
           opts :: [read_option()],
-          fun :: nil | (%Read{} -> term())
+          fun :: nil | (%Read{}, term() -> term())
         ) :: Enumerable.t() | term()
   def read(session, database, stream_name, opts \\ [], fun \\ nil) do
     start_position = Keyword.get(opts, :position)

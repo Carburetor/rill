@@ -42,7 +42,8 @@ defmodule Rill.MessageStore.Ecto.Postgres do
       @spec read(
               stream_name :: String.t(),
               opts :: [Rill.MessageStore.Database.get_opts()],
-              fun :: nil | (%Rill.MessageStore.MessageData.Read{} -> term())
+              fun ::
+                nil | (%Rill.MessageStore.MessageData.Read{}, term() -> term())
             ) :: Enumerable.t() | term()
       def read(stream_name, opts \\ [], fun \\ nil) do
         repo = unquote(repo)

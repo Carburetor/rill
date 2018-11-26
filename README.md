@@ -46,4 +46,9 @@ defmodule Run do
     Repo.start_link(name: Repo)
   end
 end
+
+Run.run()
+tmp = %Foo{name: "foo", age: 213}
+MessageStore.write(tmp, "cacca-456")
+MessageStore.read("foo-123", position: 2, batch_size: 1)|>Enum.map(fn m -> m end)
 ```
