@@ -8,7 +8,7 @@ defmodule Rill.EntityProjection do
   @spec apply(
           projection :: module(),
           entity :: term(),
-          message_data :: %Read{} | [%Read{}]
+          message_data :: %Read{} | Enumerable.t()
         ) :: term()
   def apply(projection, entity, message_data) do
     dictionary = Dictionary.get_dictionary(projection)
@@ -40,7 +40,7 @@ defmodule Rill.EntityProjection do
           projection :: module(),
           entity :: term(),
           dictionary :: %Dictionary{},
-          messages_data :: [%Read{}]
+          messages_data :: Enumerable.t()
         ) :: term()
   def apply(projection, entity, %Dictionary{} = dictionary, messages_data)
       when is_list(messages_data) do
