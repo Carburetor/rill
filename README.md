@@ -130,14 +130,39 @@ defmodule Handler do
 end
 
 defmodule Consumer do
-  use Rill.Consumer, handlers: [Handler], stream_name: "person", reader: Database
+  use Rill.Consumer,
+    handlers: [Handler],
+    stream_name: "person",
+    reader: Database,
+    poll_interval_milliseconds: 10000,
+    batch_size: 1
+end
+
+defmodule PersonComponent do
+  use Rill.ComponentHost, [Consumer]
 end
 
 defmodule Run do
   def run do
-    Repo.start_link(name: Repo)
-    Store.get("123")
-    Rill.Messaging.Handler(Handler, MessageStore.read("person-123"))
+    {:ok, pid1} = Repo.start_link(name: Repo)
+    # Store.get("123")
+    # Rill.Messaging.Handler(Handler, MessageStore.read("person-123"))
+    # {:ok, pid2} = Consumer.start_link()
+    # IO.inspect({pid1, pid2})
+    # Process.unlink(pid1)
+    # Process.unlink(pid2)
+
+    # :timer.sleep(1500)
+    # Process.exit(pid2, "timetogo")
+    Supervisor.start_link(
+      [
+        PersonComponent
+        # {Rill.ComponentHost, [Consumer]}
+      ],
+      strategy: :one_for_one
+    )
+
+    # Rill.ComponentHost.start_link([Consumer])
   end
 end
 ```

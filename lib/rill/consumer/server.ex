@@ -29,14 +29,21 @@ defmodule Rill.Consumer.Server do
     quote location: :keep do
       use GenServer
 
-      def start_link(state \\ %Rill.Consumer{}, opts \\ []) do
-        GenServer.start_link(__MODULE__, state, opts)
+      def child_spec(args \\ []) do
+        %{
+          id: __MODULE__,
+          start: {__MODULE__, :start_link, [Map.new(args)]}
+        }
+      end
+
+      def start_link(merge_state \\ %{}, opts \\ []) do
+        GenServer.start_link(__MODULE__, merge_state, opts)
       end
 
       @impl GenServer
-      def init(state \\ %Rill.Consumer{}) do
+      def init(merge_state \\ %{}) do
         state =
-          state
+          %Rill.Consumer{}
           |> Map.put(:identifier, unquote(identifier))
           |> Map.put(:handlers, unquote(handlers))
           |> Map.put(:stream_name, unquote(stream_name))
@@ -47,6 +54,7 @@ defmodule Rill.Consumer.Server do
           |> Map.put(:batch_size, unquote(batch_size))
           |> Map.put(:reader, unquote(reader))
           |> Map.put(:condition, unquote(condition))
+          |> Map.merge(merge_state)
 
         state = Rill.Consumer.listen(state, self())
 
