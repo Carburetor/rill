@@ -19,6 +19,9 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/rill](https://hexdocs.pm/rill).
 
+## Examples
+
+### Memory
 
 ```elixir
 
@@ -68,7 +71,7 @@ defmodule Run do
 end
 ```
 
-## Store
+### Everything
 
 ```elixir
 
@@ -100,6 +103,10 @@ defmodule Repo do
   end
 end
 
+defmodule Database do
+  use Rill.MessageStore.Ecto.Postgres.Database, repo: Repo
+end
+
 defmodule MessageStore do
   use Rill.MessageStore.Ecto.Postgres, repo: Repo
 end
@@ -120,6 +127,10 @@ defmodule Handler do
     IO.inspect(renamed)
     IO.puts("hello")
   end
+end
+
+defmodule Consumer do
+  use Rill.Consumer, handlers: [Handler], stream_name: "person", reader: Database
 end
 
 defmodule Run do
