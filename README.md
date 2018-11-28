@@ -145,6 +145,8 @@ end
 defmodule Run do
   def run do
     {:ok, pid1} = Repo.start_link(name: Repo)
+    # renamed = %Renamed{name: "foo1234r"}
+    # MessageStore.write(renamed, "person-123")
     # Store.get("123")
     # Rill.Messaging.Handler(Handler, MessageStore.read("person-123"))
     # {:ok, pid2} = Consumer.start_link()
