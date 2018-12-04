@@ -1,5 +1,17 @@
-defmodule Rill.MessageStore.Session do
+defmodule Rill.Session do
   defstruct message_store: nil, database: nil, config: %{}
+
+  @type t :: %__MODULE__{
+          message_store: module(),
+          database: module(),
+          config: map()
+        }
+
+  def new(message_store, database) do
+    %__MODULE__{}
+    |> put_message_store(message_store)
+    |> put_database(database)
+  end
 
   def get_config(%__MODULE__{} = session, key, default \\ nil) do
     Map.get(session.config, key, default)
