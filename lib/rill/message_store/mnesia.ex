@@ -7,15 +7,15 @@ defmodule Rill.MessageStore.Mnesia do
   alias :mnesia, as: Mnesia
   alias Rill.MessageStore.Mnesia.Repo
 
-  @spec start(ns :: atom()) :: no_return()
-  def start(ns) do
+  @spec start(namespace :: atom()) :: no_return()
+  def start(namespace) do
     Mnesia.start()
-    Repo.create(ns)
+    Repo.create(namespace)
   end
 
-  @spec stop(ns :: atom()) :: no_return()
-  def stop(ns) do
-    Repo.delete(ns)
+  @spec stop(namespace :: atom()) :: no_return()
+  def stop(namespace) do
+    Repo.delete(namespace)
   end
 
   @type transaction_retries_option :: {:transaction_retries, pos_integer()}
